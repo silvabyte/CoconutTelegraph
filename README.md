@@ -1,29 +1,38 @@
 # CoconutTelegraph
 
-**A token-dense robot programming DSL demonstrating Scala 3's metaprogramming power**
+**A token-dense robot programming language built with Scala 3 metaprogramming**
 
-> "What would a token-dense programming language made for robots that has formal method origins look like?"
->
-> tired: Java verbosity
-> wired: `&38:$3.;33;,:` = 180k LOC of Java
+Which is A PoC based on this tweet: <https://x.com/GeoffreyHuntley/status/2011064850634719461>
+
+> what would a token dense
+> programming language
+> made for robots
+ that has formal
+ method origins
+
+ looks like?
+
+ tired: java verbosity
+
+ wired: “&38:$3.;33;,:” = 180k LOC of java
 
 ## The Concept
 
-This project explores how Scala 3's extensibility allows us to create languages that feel native while encoding massive amounts of logic in minimal syntax.
+This project explores how Scala 3's extensibility allows us to create languages that feel native while encoding massive amounts of logic in minimal syntax. The key insight: Scala 3's metaprogramming features (opaque types, extension methods, macros, given instances) enable us to build a complete robot DSL that compiles down to efficient code with compile-time safety guarantees.
 
 ### The Density Spectrum
 
 ```scala
-// VERBOSE (Java-style) - ~50 lines
+// EXPLICIT - Every step written out (~50 lines)
 val proximitySensor0 = Proximity(0)
 val frontDistance = proximitySensor0.read
 robot.memory("front") = frontDistance
 if frontDistance < 30 then
   leftMotor.set(-50)
   rightMotor.set(50)
-// ... continues for 40+ more lines
+// ... continues
 
-// INTERMEDIATE (Scala DSL) - ~15 lines
+// DSL - Symbolic operators (~15 lines)
 Program("behavior")(
   sen(0).prox >> "front",
   cnd(_.memory.get("front").exists(_ < 30))(
@@ -35,19 +44,21 @@ Program("behavior")(
   )
 )
 
-// DENSE (String encoding) - ~30 chars
+// DENSE - String encoding (~30 chars)
 r"?0{30:@-90.:!050!150}"
 
-// ULTRA-DENSE - ~10 chars
+// ULTRA-DENSE (~10 chars)
 UltraDenseCode.ultra("&05&15~0")
 ```
 
 ## Features
 
-### 1. Refinement Types (Formal Methods Flavor)
+### 1. Refinement Types (Formal Methods)
+
+Compile-time bounded integers using opaque types and inline macros:
 
 ```scala
-// Compile-time bounded integers
+// Type-safe bounded values
 type Pct = Bounded[0, 100]     // Percentage: always 0-100
 type Deg = Bounded[0, 359]     // Angle in degrees
 type Pwr = Bounded[-100, 100]  // Motor power
@@ -61,18 +72,22 @@ val invalidPower: Pct = Bounded[0, 100](150)  // Error!
 
 ### 2. Type-Safe State Machines
 
+State transitions proven at compile time via given instances:
+
 ```scala
-// Valid transitions proven at compile time
+// Valid transitions declared as evidence
 given CanTransition[RobotState.Idle.type, RobotState.Moving.type]
 given CanTransition[RobotState.Moving.type, RobotState.Turning.type]
 
-// This compiles:
+// This compiles - valid transition
 robot.transition(RobotState.Idle, RobotState.Moving)
 
-// Invalid transitions won't compile
+// Invalid transitions won't compile - no evidence exists
 ```
 
 ### 3. Dense Symbolic DSL
+
+Extension methods create natural operators:
 
 ```scala
 import S.*
@@ -97,6 +112,8 @@ par(branch1, branch2)                        // Parallel execution
 ```
 
 ### 4. String-Based Dense Encoding
+
+Compile-time validated via quoted macros:
 
 ```scala
 // Dense instruction set
@@ -123,7 +140,7 @@ val safe = (patrol >> detect)
 
 ## The Mythical `&38:$3.;33;,:` Explained
 
-In a sufficiently advanced token-dense language, this 13-character string could encode:
+In a sufficiently advanced token-dense language, this 13-character string encodes:
 
 | Char | Meaning |
 |------|---------|
@@ -139,6 +156,7 @@ In a sufficiently advanced token-dense language, this 13-character string could 
 | `,`  | Short delay |
 
 **What this encodes:**
+
 - Robot initialization sequence
 - PID controller configuration
 - 5-state behavior state machine
@@ -146,19 +164,14 @@ In a sufficiently advanced token-dense language, this 13-character string could 
 - Safety monitor with emergency stop
 - Inter-robot communication sync
 
-**Equivalent code:**
-- Java: ~180,000 lines (AbstractRobotControllerFactoryBuilderStrategyVisitor...)
-- Scala DSL: ~500 lines
-- Dense encoding: **13 characters**
-
 ## Running
 
 ```bash
 # Compile
-scala compile .
+scala-cli compile .
 
 # Run demo
-scala run .
+scala-cli run .
 ```
 
 ## Project Structure
@@ -168,34 +181,40 @@ src/main/scala/coconut/
   Core.scala       # Refinement types, sensors, actuators, state machine
   Symbols.scala    # DSL operators and instruction set
   Robot.scala      # Robot runtime
-  DenseCode.scala  # String-based dense code compiler
+  DenseCode.scala  # String-based dense code compiler with macros
   Behaviors.scala  # Higher-level behavior library
   Examples.scala   # Demo showing the density spectrum
 ```
 
-## Scala 3 Features Used
+## Scala 3 Metaprogramming Features
 
-- **Opaque types** - Zero-cost type safety for bounded values and sensor readings
-- **Extension methods** - Operator overloading (`*`, `>>`, `<<`, `.deg`)
-- **Given instances** - Type-safe state transitions
-- **Inline/macros** - Compile-time code validation
-- **String interpolators** - `r"..."`for dense code
-- **Enum types** - Robot states and directions
-- **Union types** - Flexible instruction composition
-- **Contextual abstractions** - Implicit conversions for DSL fluency
+This project showcases Scala 3's metaprogramming capabilities:
 
-## Inspiration
+| Feature | Usage |
+|---------|-------|
+| **Opaque types** | Zero-cost type safety for `Bounded`, `Reading` |
+| **Extension methods** | Operators `*`, `>>`, `<<`, `.deg` |
+| **Given instances** | Type-safe state transitions as evidence |
+| **Inline/macros** | Compile-time dense code validation |
+| **String interpolators** | `r"..."` custom syntax |
+| **Enum types** | `RobotState`, `Dir` |
+| **Contextual abstractions** | Implicit conversions for DSL fluency |
 
-This project demonstrates how language design choices impact expressivity. The same robot behavior can be expressed in:
+## Why Token Density Matters for Robots
 
-1. **Verbose** - Every operation explicit, lots of boilerplate
-2. **DSL** - Domain-specific abstractions, readable but compact
-3. **Dense** - Maximum information per character, write-only but powerful
+Real robots need different levels of expression:
 
-The "formal methods origins" manifests in:
-- Refinement types (bounded integers)
-- Type-safe state machines
-- Compile-time validation
-- Behavior invariants
+1. **Dense** - For transmission, storage, and bandwidth-constrained communication
+2. **DSL** - For development and readable behavior specification
+3. **Explicit** - For debugging and understanding exactly what happens
 
-Real robots need all three levels - dense for transmission/storage, DSL for development, verbose for debugging.
+Scala 3 lets us build all three levels as a unified system where each can be converted to the others, with compile-time guarantees at every level.
+
+## Formal Methods Origins
+
+The "formal methods flavor" manifests in:
+
+- **Refinement types** - Bounded integers proven at compile time
+- **Type-safe state machines** - Transitions verified via given instances
+- **Compile-time validation** - Dense code checked by macros before runtime
+- **Behavior invariants** - Safety conditions enforced compositionally

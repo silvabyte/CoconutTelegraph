@@ -3,15 +3,15 @@ package coconut
 /**
  * Examples demonstrating the density spectrum
  *
- * From verbose Java-style to ultra-dense robot encoding
+ * From explicit imperative code to ultra-dense robot encoding
  */
 object Examples:
 
   // ============================================================================
-  // VERBOSE STYLE (Java-like, ~50-100 lines equivalent)
+  // EXPLICIT STYLE - Imperative, step-by-step
   // ============================================================================
 
-  def verboseExample(): Unit =
+  def explicitExample(): Unit =
     val robot = Robot("Verbose")
 
     // Create sensors
@@ -130,14 +130,6 @@ object Examples:
    * - Safety monitors
    * - Emergency stop handlers
    * - Communication protocols
-   *
-   * In Java, this would indeed be 180k+ lines:
-   * - AbstractRobotControllerFactory
-   * - BehaviorStrategyVisitorAdapter
-   * - SensorReadingProcessorChainBuilder
-   * - MotorOutputManagerServiceLocator
-   * - StateMachineTransitionHandlerFactory
-   * - etc.
    */
   val theCode = "&38:$3.;33;,:"
 
@@ -170,9 +162,8 @@ object Examples:
     println("  * Safety monitor with emergency stop")
     println("  * Inter-robot communication sync")
     println()
-    println("Equivalent Java LOC: ~180,000")
-    println("Equivalent Scala DSL: ~500")
     println(s"Dense encoding: ${code.length} characters")
+    println("Equivalent Scala DSL: ~500 lines")
 
 
   // ============================================================================
@@ -215,9 +206,9 @@ object Examples:
     println("  COCONUT TELEGRAPH - Token-Dense Robot Language")
     println("=" * 60)
 
-    println("\n[1] Verbose Style (Java-like)")
+    println("\n[1] Explicit Style (Imperative)")
     println("-" * 40)
-    verboseExample()
+    explicitExample()
 
     println("\n[2] Intermediate Style (Scala DSL)")
     println("-" * 40)

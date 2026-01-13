@@ -3,8 +3,8 @@ package coconut
 /**
  * Higher-level robot behaviors built on the dense primitives
  *
- * These demonstrate how terse code can encode complex behaviors
- * that would require hundreds of lines in verbose languages.
+ * These demonstrate how Scala 3's metaprogramming enables
+ * composable, type-safe robot behavior definitions.
  */
 
 object Behaviors:
@@ -152,7 +152,7 @@ object BehaviorLib:
   val fullStop = DenseCode.parse("!00!10#")
 
   /**
-   * The "180k LOC of Java" program
+   * Complex behavior demonstrating dense encoding
    *
    * This encodes:
    * - Initialize sensors
@@ -165,8 +165,6 @@ object BehaviorLib:
    *   - Emergency stop conditions
    *
    * In dense form: &38:$3.;33;,:
-   *
-   * Expanded, this would be thousands of lines of verbose code.
    */
   val complexBehavior: Program =
     Program("complex")(

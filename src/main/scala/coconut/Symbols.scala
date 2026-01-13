@@ -6,7 +6,7 @@ import scala.annotation.targetName
  * The Dense Symbolic Language
  *
  * Each symbol encodes a robot operation. Combined, they form
- * programs that would take hundreds of lines in Java.
+ * compact programs leveraging Scala 3's metaprogramming.
  *
  * Symbol Reference (using ASCII-safe operators):
  *   >   <       Movement forward/backward
