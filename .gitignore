@@ -1,0 +1,29 @@
+# Scala-cli build artifacts
+.scala-build/
+.bsp/
+
+# Metals (Scala LSP)
+.metals/
+metals.sbt
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+
+# SBT (if used)
+target/
+project/target/
+project/project/
+
+# Coursier cache
+.coursier/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Temporary/draft files
+prompt*.md
