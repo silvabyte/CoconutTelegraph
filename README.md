@@ -166,12 +166,16 @@ In a sufficiently advanced token-dense language, this 13-character string encode
 
 ## Running
 
+Install the Scala CLI (`scala`) (see <https://docs.scala-lang.org/getting-started/install-scala.html>):
+
+Then compile and run with the `scala` command:
+
 ```bash
 # Compile
-scala-cli compile .
+scala compile .
 
 # Run demo
-scala-cli run .
+scala run .
 ```
 
 ## Project Structure
